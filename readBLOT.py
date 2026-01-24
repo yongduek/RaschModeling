@@ -60,6 +60,9 @@ def read_blot_data(filepath):
         while len(item_labels) < num_items:
             item_labels.append(f"Item_{len(item_labels)+1}")
 
+    # Modify item names to include index to avoid duplicates
+    item_labels = [f"{i+1}_{label}" for i, label in enumerate(item_labels)]
+
     # Parse Data
     data = []
     person_ids = []
