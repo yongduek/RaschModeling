@@ -106,13 +106,13 @@ def solve_theta(score, item_difficulties):
     except RuntimeError:
         return np.nan
 
-def main():
-    print("Loading Data...")
-    df = read_blot_data('blot.txt')
+def rasch_cmle(datafile='blot.txt'):
+    print(f"Loading Data from {datafile}...")
+    df = read_blot_data(datafile)
     
     if df is None or df.empty:
         print("Error: Empty or missing dataframe.")
-        return
+        return None, None
 
     # Extract Item Matrix
     # Avoid duplicate column selection issues by using iloc
@@ -133,7 +133,7 @@ def main():
     
     if len(X_calib) == 0:
         print("No valid cases for CML estimation (all scores are 0 or max).")
-        return
+        return None, None
         
     print(f"Calibration Sample: {len(X_calib)} persons (excluding extreme scores)")
     
@@ -308,9 +308,15 @@ def main():
     out_file_items = 'rasch_item_params.csv'
     out_file_persons = 'rasch_person_measures.csv'
     
-    results.to_csv(out_file_items, index=False)
-    df_out.to_csv(out_file_persons, index=False)
-    print(f"\nSaved results to {out_file_items} and {out_file_persons}")
+    # results.to_csv(out_file_items, index=False)
+    # df_out.to_csv(out_file_persons, index=False)
+    # print(f"\nSaved results to {out_file_items} and {out_file_persons}")
+    
+    return results, df_out
 
 if __name__ == "__main__":
-    main()
+    items_df, persons_df = rasch_cmle()
+    if items_df is not None:
+        items_df.to_csv('rasch_item_params.csv', index=False)
+        persons_df.to_csv('rasch_person_measures.csv', index=False)
+        print("Saved rasch_item_params.csv and rasch_person_measures.csv")

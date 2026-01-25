@@ -46,7 +46,7 @@ def draw_pathway(
         else:
             sizes_p = base_size
             
-        plt.scatter(person_fits, person_locations, s=sizes_p, c='blue', marker='s', alpha=0.4, label='Persons (Size $\propto$ SE)')
+        plt.scatter(person_fits, person_locations, s=sizes_p, c='blue', marker='s', alpha=0.4, label=r'Persons (Size $\propto$ SE)')
 
     # --- Plot Items ---
     if item_locations is not None and item_fits is not None:
@@ -55,13 +55,13 @@ def draw_pathway(
         else:
              sizes_i = base_size
 
-        plt.scatter(item_fits, item_locations, s=sizes_i, c='hotpink', marker='o', edgecolors='black', alpha=0.6, label='Items (Size $\propto$ SE)')
+        plt.scatter(item_fits, item_locations, s=sizes_i, c='hotpink', marker='o', edgecolors='black', alpha=0.6, label=r'Items (Size $\propto$ SE)')
 
         # Labels
         if item_labels is not None:
             for i, txt in enumerate(item_labels):
                 if i < len(item_locations):
-                    plt.text(item_fits[i], item_locations[i], f" {i+1} {txt}", fontsize=8, alpha=0.8)
+                    plt.text(item_fits[i], item_locations[i], f"  {txt}", fontsize=8, alpha=0.8)
 
     # Reference Lines
     plt.axvline(-2, color='gray', linestyle='--', linewidth=1)
@@ -71,7 +71,7 @@ def draw_pathway(
     # Decoration
     title_str = 'Bond & Fox Pathway Plot (Fit vs. Measure)'
     if len(all_se) > 0:
-        title_str += '\nSymbol Radius $\propto$ Standard Error (Larger = Less Precise)'
+        title_str += r'\nSymbol Radius $\propto$ Standard Error (Larger = Less Precise)'
         
     plt.title(title_str, fontsize=15)
     plt.ylabel('Logits (Measure) \n(Higher = More Ability / More Difficulty)', fontsize=12)
