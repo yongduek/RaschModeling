@@ -212,3 +212,7 @@ rasch_jmle_items.csv
 rasch_bayes_persons.csv
 rasch_item_params.csv
 rasch_bayes_items.csv
+split_sample_results.csv
+split_sample_plot.png
+split_sample_bayes.csv
+split_sample_bayes_plot.png
