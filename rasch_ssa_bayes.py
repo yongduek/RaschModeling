@@ -62,9 +62,9 @@ def estimate_rasch_bayes(X, item_cols=None):
     
     summary = fit.summary()
     
-    # Extract Betas
-    beta_rows = [idx for idx in summary.index if idx.startswith('beta[')]
-    item_results = summary.loc[beta_rows, ['Mean', 'StdDev']]
+    # Extract Deltas
+    delta_rows = [idx for idx in summary.index if idx.startswith('delta[')]
+    item_results = summary.loc[delta_rows, ['Mean', 'StdDev']]
     
     item_results['ItemName'] = item_cols
     item_results['ItemIndex'] = range(1, n_items + 1)

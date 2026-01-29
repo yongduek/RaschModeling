@@ -14,15 +14,15 @@ parameters {
   real<lower=0> sigma_theta;       // SD of population
 
   // Item parameters
-  vector[N_items - 1] beta_raw;    // K-1 free parameters for sum-to-zero
+  vector[N_items - 1] delta_raw;    // K-1 free parameters for sum-to-zero
 }
 
 transformed parameters {
-  vector[N_items] beta;
+  vector[N_items] delta;
   // Apply sum-to-zero constraint on items
   // This matches Winsteps/CMLE convention
-  beta[1:(N_items - 1)] = beta_raw;
-  beta[N_items] = -sum(beta_raw);
+  delta[1:(N_items - 1)] = delta_raw;
+  delta[N_items] = -sum(delta_raw);
 }
 
 model {
@@ -34,11 +34,11 @@ model {
   theta ~ normal(mu_theta, sigma_theta);
   
   // Weak prior on items
-  beta_raw ~ normal(0, 3); 
+  delta_raw ~ normal(0, 3); 
 
   // Likelihood
   // Optimized vectorized operation
-  y ~ bernoulli_logit(theta[jj] - beta[kk]);
+  y ~ bernoulli_logit(theta[jj] - delta[kk]);
 }
 
 generated quantities {
@@ -48,7 +48,7 @@ generated quantities {
   array[N_obs] int<lower=0, upper=1> y_rep;
   
   for (n in 1:N_obs) {
-    real logit_p = theta[jj[n]] - beta[kk[n]];
+    real logit_p = theta[jj[n]] - delta[kk[n]];
     log_lik[n] = bernoulli_logit_lpmf(y[n] | logit_p);
     y_rep[n] = bernoulli_logit_rng(logit_p);
   }

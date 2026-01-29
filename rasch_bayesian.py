@@ -172,14 +172,14 @@ def run_bayesian_estimation():
     # 5. Extract Results
     summary = fit.summary()
     
-    # Extract Beta (Item Difficulties)
-    # Rows starting with 'beta['
-    beta_rows = [idx for idx in summary.index if idx.startswith('beta[')]
-    item_results = summary.loc[beta_rows, ['Mean', 'StdDev', '5%', '95%', 'R_hat']]
+    # Extract Delta (Item Difficulties)
+    # Rows starting with 'delta['
+    delta_rows = [idx for idx in summary.index if idx.startswith('delta[')]
+    item_results = summary.loc[delta_rows, ['Mean', 'StdDev', '5%', '95%', 'R_hat']]
     
     # Add Item Names
     params_idx = []
-    # summary index is beta[1], beta[2]... 
+    # summary index is delta[1], delta[2]... 
     # Use the original item names list, which matches 1..K order
     item_results['ItemName'] = original_item_names
     item_results['UniqueName'] = unique_item_names
@@ -192,11 +192,11 @@ def run_bayesian_estimation():
     print("Computing Fit Statistics...")
     
     # 1. Prepare Vectors
-    # Beta Vector (1..K)
-    beta_vec = np.zeros(n_items)
+    # Delta Vector (1..K)
+    delta_vec = np.zeros(n_items)
     for i in range(n_items):
-        key = f'beta[{i+1}]'
-        beta_vec[i] = item_results.loc[key, 'Difficulty_Bayes']
+        key = f'delta[{i+1}]'
+        delta_vec[i] = item_results.loc[key, 'Difficulty_Bayes']
         
     # Theta Vector (1..N)
     theta_vec = np.zeros(n_persons)
@@ -220,8 +220,8 @@ def run_bayesian_estimation():
     mask = ~np.isnan(X)
     
     # 3. Probability Matrix & Residuals
-    # logit[n,i] = theta[n] - beta[i]
-    logit_matrix = theta_vec[:, np.newaxis] - beta_vec[np.newaxis, :]
+    # logit[n,i] = theta[n] - delta[i]
+    logit_matrix = theta_vec[:, np.newaxis] - delta_vec[np.newaxis, :]
     logit_matrix = np.clip(logit_matrix, -30, 30) # Avoid overflow
     
     P_matrix = np.exp(logit_matrix) / (1.0 + np.exp(logit_matrix))
@@ -275,7 +275,7 @@ def run_bayesian_estimation():
         pm_corrs.append(r)
         
     # Add to DataFrame
-    keys = [f'beta[{i+1}]' for i in range(n_items)]
+    keys = [f'delta[{i+1}]' for i in range(n_items)]
     item_results.loc[keys, 'InfitMNSQ'] = infit_msq
     item_results.loc[keys, 'OutfitMNSQ'] = outfit_msq
     item_results.loc[keys, 'Infit_t'] = infit_t

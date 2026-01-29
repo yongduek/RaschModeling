@@ -13,7 +13,7 @@ def draw_pathway(
     - person_locations: Array of Person measures (theta).
     - person_fits: Array of Person Infit t-stats.
     - person_se: Array of Person Standard Errors.
-    - item_locations: Array of Item measures (beta).
+    - item_locations: Array of Item measures (delta).
     - item_fits: Array of Item Infit t-stats.
     - item_se: Array of Item Standard Errors.
     - item_labels: List of item names.
